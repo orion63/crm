@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sead_activity_master_group_user,sead.activity.master.user,model_sead_activity_master,base.group_user,1,1,1,1
+access_sead_activity_child_group_user,sead.activity.child.user,model_sead_activity_child,base.group_user,1,1,1,1
+access_sead_position_status_group_user,sead.position.status.user,model_sead_position_status,base.group_user,1,1,1,1
+access_sead_position_general_area_group_user,sead.position.general_area.user,model_sead_position_general_area,base.group_user,1,1,1,1
+access_sead_position_business_area_group_user,sead.position.business_area.user,model_sead_position_business_area,base.group_user,1,1,1,1
+access_seminarium_jobs_bd_job_group_user,seminarium.jobs.bd_job.user,model_seminarium_jobs_bd_job,base.group_user,1,1,1,1
+
