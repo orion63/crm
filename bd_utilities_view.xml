@@ -1,0 +1,197 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id='view_form_bd_utilities_wizard' model='ir.ui.view'>
+            <field name='name'>BD Seller Change Wizard</field>
+            <field name='model'>sead.bd_utilities.seller_change_wizard</field>
+            <field name='arch' type='xml'>
+                <form string='Wizard de cambio de Vendedor'>
+                    <header>    
+                        <button name='do_change' string='Proceder'
+                            class='oe_highlight'
+                            type='object'
+                            />      
+                    </header>
+                    <sheet>
+                        <group string="Wizard para cambiar empresas de vendedor" col="1">
+                            <p class="oe_grey">
+                                Debe seleccionar el equipo del vendedor que desea cambiar,
+                                el nombre del vendedor que sale del equipo y el nombre del
+                                vendedor que lo reemplaza. Solo serán modificadas las empresas que estén calificadas como clientes.
+                                 
+                                Este proceso afecta globalmente a la base de datos y no puede ser revertido.
+                                Asegurese de haber seleccionado correctamente los datos antes de proceder.
+                            </p>
+                        </group>
+                        <group string="Atención!" col="1">
+                            <p class="oe_grey">
+                                Este proceso puede demorar bastante según la cantidad de registros que deba modificar.
+                                No intente cancelar el proceso o refrescar la página.
+                            </p>
+                        </group>
+                        <group col="2">
+                            <field name='team_to_change'/>
+                            <field name='seller_source'/>
+                            <field name='seller_target'/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>                           
+
+        <record id='view_form_bd_utilities_wizard2' model='ir.ui.view'>
+            <field name='name'>BD Seller Redistribution Wizard</field>
+            <field name='model'>sead.bd_utilities.seller_redistribution_wizard</field>
+            <field name='arch' type='xml'>
+                <form string='Wizard de Reparto de Cartera de Vendedora'>
+                    <header>    
+                        <button name='do_change' string='Proceder'
+                            class='oe_highlight'
+                            type='object'
+                            />      
+                    </header>
+                    <sheet>
+                        <group string="Wizard para repartir la cartera de un vendedor entre otros vendedores" col="1">
+                            <p class="oe_grey">
+                                Primero debe seleccionar el equipo del vendedor que desea cambiar y
+                                el nombre del vendedor cuya cartera se repartirá. Luego debe seleccionar los
+                                vendedores que recibirán el reparto de la cartera, se puede repartir hasta
+                                entre 6 vendedores. Solo serán modificadas las empresas que estén calificadas como clientes.
+                                 
+                                Este proceso afecta globalmente a la base de datos y no puede ser revertido.
+                                Asegurese de haber seleccionado correctamente los datos antes de proceder.
+                            </p>
+                        </group>
+                        <group string="Atención!" col="1">
+                            <p class="oe_grey">
+                                Este proceso puede demorar bastante según la cantidad de registros que deba modificar.
+                                No intente cancelar el proceso o refrescar la página.
+                            </p>
+                        </group>
+                        <group>
+                            <field name='team_to_change'/>
+                            <field name='seller_source'/>
+                            <p class="oe_grey">
+                                Seleccione los vendedores receptores en orden.
+                            </p>
+                        </group>
+                        <group col = "2">
+                            <field name='seller_target1'/>
+                            <field name='seller_target2'/>
+                            <field name='seller_target3'/>
+                            <field name='seller_target4'/>
+                            <field name='seller_target5'/>
+                            <field name='seller_target6'/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id='view_form_bd_utilities_wizard3' model='ir.ui.view'>
+            <field name='name'>BD Seller Distribution Wizard</field>
+            <field name='model'>sead.bd_utilities.seller_null_distribution_wizard</field>
+            <field name='arch' type='xml'>
+                <form string='Wizard de Reparto de Cartera no asignada'>
+                    <header>    
+                        <button name='do_change' string='Proceder'
+                            class='oe_highlight'
+                            type='object'
+                            />      
+                    </header>
+                    <sheet>
+                        <group string="Wizard para repartir la cartera no asignada entre varios vendedores" col="1">
+                            <p class="oe_grey">
+                                Primero debe seleccionar el equipo que se va a trabajar. Luego debe seleccionar los
+                                vendedores que recibirán el reparto de la cartera, se puede repartir hasta
+                                entre 6 vendedores. Solo serán modificadas las empresas que estén calificadas como clientes.
+                                 
+                                Este proceso afecta globalmente a la base de datos y no puede ser revertido.
+                                Asegurese de haber seleccionado correctamente los datos antes de proceder.
+                            </p>
+                        </group>
+                        <group string="Atención!" col="1">
+                            <p class="oe_grey">
+                                Este proceso puede demorar bastante según la cantidad de registros que deba modificar.
+                                No intente cancelar el proceso o refrescar la página.
+                            </p>
+                        </group>
+                        <group>
+                            <field name='team_to_change'/>
+                            <p class="oe_grey">
+                                Seleccione los vendedores receptores en orden.
+                            </p>
+                        </group>
+                        <group col = "2">
+                            <field name='seller_target1'/>
+                            <field name='seller_target2'/>
+                            <field name='seller_target3'/>
+                            <field name='seller_target4'/>
+                            <field name='seller_target5'/>
+                            <field name='seller_target6'/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>                                   
+
+
+        <!-- Las accciones -->
+
+        <record model="ir.actions.act_window" id="action_bd_utilities_cambio_vendedora">
+            <field name="name">Cambio de vendedor</field>
+            <field name="res_model">sead.bd_utilities.seller_change_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'active_test': False}</field>
+        </record>       
+
+        <record model="ir.actions.act_window" id="action_bd_utilities_reparto_vendedora">
+            <field name="name">Reparto de Cartera</field>
+            <field name="res_model">sead.bd_utilities.seller_redistribution_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'active_test': False}</field>
+        </record>       
+
+        <record model="ir.actions.act_window" id="action_bd_utilities_cartera_no_asignada">
+            <field name="name">Reparto de Cartera no asignada</field>
+            <field name="res_model">sead.bd_utilities.seller_null_distribution_wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{'active_test': False}</field>
+        </record>       
+
+        <!-- El menu principal -->
+
+        <menuitem id="menu_bd_utilities"
+            name="Utilidades de BD"
+            parent="base.menu_base_config"
+            sequence="24" />
+
+        <!-- Los submenues -->
+
+        <menuitem id="menu_bd_utilities_cambio_vendedora"
+            name="Cambio de Vendedor"
+            parent="menu_bd_utilities"
+            sequence="1"
+            action="action_bd_utilities_cambio_vendedora" />
+
+
+        <menuitem id="menu_bd_utilities_reparto_vendedora"
+            name="Reparto Cartera de Vendedor"
+            parent="menu_bd_utilities"
+            sequence="2"
+            action="action_bd_utilities_reparto_vendedora" />
+
+        <menuitem id="menu_bd_utilities_reparto_no_asignadas"
+            name="Reparto Cartera no asignada"
+            parent="menu_bd_utilities"
+            sequence="3"
+            action="action_bd_utilities_cartera_no_asignada" />
+
+    </data>
+</openerp>

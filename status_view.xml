@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="view_form_position_status" model="ir.ui.view">
+			<field name="name">Position Status Form</field>
+			<field name="model">sead.position.status</field>
+			<field name="arch" type="xml">
+				<form string="Position Status">
+					<sheet>
+						<group name="group_top">
+							<group name="group_left">
+								<field name="name"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_tree_position_status" model="ir.ui.view">
+			<field name="name">Position Estatus Tree</field>
+			<field name="model">sead.position.status</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+					<!-- Action to open Estatus Cargo -->
+		<act_window id="action_status"
+			name="Status"
+			res_model="sead.position.status"
+			view_mode="tree,form" />
+
+		<!-- Menu item to open Estatus Cargo -->
+		<menuitem id="menu_status"
+			name="Estatus de cargo"
+			parent="base.menu_base_config"
+			sequence="22"
+			action="action_status" />	
+				
+	</data>
+</openerp>

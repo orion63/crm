@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="view_form_partner_inherited" model="ir.ui.view">
+			<field name="name">Partner Form - User extension</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="arch" type="xml">
+				<!-- Cambios para cargos -->
+				<field name="title" position="after">
+					<field name="status" attrs="{'invisible': [('is_company', '=', True)]}" />
+					<field name="title" attrs="{'invisible': [('is_company', '=', True)]}" />
+				</field>
+				<field name="function" position="after">
+					<field name="gender" attrs="{'invisible': [('is_company', '=', True)]}" />
+				</field>
+				<field name="phone" position="after">
+					<field name="other_phones" />
+					<field name="direct_phone" attrs="{'invisible': [('is_company', '=', True)]}" />
+				</field>
+				<field name="fax" position="after">
+					<field name="rank_points" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="rank_position" attrs="{'invisible': [('is_company', '!=', True)]}" />
+				</field>
+				<field name="website" position="replace">
+					<field name="website" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="business_area" attrs="{'invisible': [('is_company', '=', True)]}" />
+					<field name="hierarchy_level" attrs="{'invisible': [('is_company', '=', True)]}" />
+					<field name="secretary" attrs="{'invisible': [('is_company', '=', True)]}" />
+					<field name="secretary_phone" attrs="{'invisible': [('is_company', '=', True)]}" />
+					<field name="secretary_mobile" attrs="{'invisible': [('is_company', '=', True)]}" />
+				</field>			
+				<!-- Cambios para empresas -->
+				<field name="title" position="replace">
+					<field name="email" attrs="{'invisible': [('is_company', '=', True)]}" />										
+				</field>
+				<field name="website" position="before">
+					<field name="common_name" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="business_line" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="regular_customer" attrs="{'invisible': [('is_company', '!=', True)]}" />
+				</field>	
+				<field name="email" position="replace">
+					<field name="email" attrs="{'invisible': [('is_company', '!=', True)]}" />					
+				</field>
+    			<xpath expr="//page[@string='Contacts']" position="after">
+        			<page string="Actividades" attrs="{'invisible': [('is_company', '!=', True)]}">
+            			<field name='activities'/>
+        			</page>
+    			</xpath>
+    			<xpath expr="//page[@string='Contacts']" position="after">
+        			<page string="Eventos">
+            			<field name='events'/>
+        			</page>
+        			<page string="Mailings" attrs="{'invisible': [('is_company', '=', True)]}">
+            			<field name='mailing_ids'/>
+        			</page>           			
+    			</xpath>
+    			<xpath expr="//page[@string='Contacts']" position="after">
+        			<page string="eMails" attrs="{'invisible': [('is_company', '=', True)]}">
+						<group>
+							<group>
+            					<field name='email'/>
+            					<field name="email_exclude" />
+            					<field name="email_gracias" />
+							</group>					
+							<group>
+            					<field name='personal_email'/>
+            					<field name="personal_email_exclude" />
+            					<field name="personal_email_gracias" />
+							</group>					
+							<group>
+            					<field name='secretary_email'/>
+            					<field name="secretary_email_exclude" />
+            					<field name="secretary_email_gracias" />
+							</group>					
+							<group>
+            					<field name='secretary_personal_email'/>
+            					<field name="secretary_personal_email_exclude" />
+            					<field name="secretary_personal_email_gracias" />
+							</group>					
+						</group>
+        			</page>
+    			</xpath>	    							
+    			<xpath expr="//page[@string='Contacts']" position="after">
+        			<page string="Legado">
+						<group>
+							<group>
+            					<field name='semi_fecha_creacion'/>
+            					<field name='semi_fecha_modificacion'/>
+            					<field name="semi_fecha_cambio" />
+            					<field name="compatible_code" />
+            					<field name="ejec_codigo" />            					
+							</group>
+							<group>
+            					<field name='semi_usuario_creacion'/>
+            					<field name='semi_usuario_modificacion'/>
+            					<field name="semi_usuario_cambio" />
+            					<button name="do_register_verification" type="object" string="Registrar actualización" class="oe_edit_only" />
+            					<button name="get_company_report" type="object" string="Generar Ficha" class="oe_highlight" attrs="{'invisible': [('is_company', '!=', True)]}"/>
+							</group>
+						</group>
+        			</page>
+    			</xpath>	    							    			
+				<field name="user_id" position="after">
+					<field name="seller_1" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="seller_2" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="seller_3" attrs="{'invisible': [('is_company', '!=', True)]}" />
+					<field name="seller_sponsors" attrs="{'invisible': [('is_company', '!=', True)]}" />
+				</field>				
+				<field name="ref" position="before">
+					<field name="bd_user" attrs="{'invisible': [('is_company', '!=', True)]}" />
+				</field>						
+			</field>
+		</record>	
+
+
+		<record id="view_filter_partner_inherited" model="ir.ui.view">
+			<field name="name">Partner filter - User extension</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_res_partner_filter"/>
+			<field name="arch" type="xml">
+				<field name="name" position="after">
+					<field name="regular_customer" />
+					<filter name="filter_habitual" string ="Cliente habitual" domain="[('regular_customer','=',True)]"/>
+				</field>
+                <!-- https://www.odoo.com/es_ES/forum/help-1/question/how-to-add-fields-to-the-search-field-suggestions-9380 -->    
+		        <search string="Search Partner">
+		            <field name="vat"/>
+		            <field name="seller_1"/>
+		            <field name="seller_2"/>
+		            <field name="seller_3"/>
+		            <field name="seller_sponsors"/>
+		            <field name="bd_user"/>
+		            <field name="activities"/>
+                    <group expand="0" string="Group By">
+						<filter string="Usuario modificación" context="{'group_by': 'semi_usuario_modificacion'}"/>
+					</group>				            
+		       </search>
+			</field>	
+		</record>
+
+
+		<act_window id="partner_to_mailing_wizard" res_model="mail.mass_mailing.wizard"  src_model="res.partner"
+			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Agregar a mailing"/>			 
+
+	</data>
+</openerp>

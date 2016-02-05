@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="view_form_activity_child" model="ir.ui.view">
+			<field name="name">Activity child Form</field>
+			<field name="model">sead.activity.child</field>
+			<field name="arch" type="xml">
+				<form string="Actividad child">
+					<sheet>
+						<group name="group_top">
+							<group name="group_left">
+								<field name="name"/>
+							</group>
+							<group name="group_right">
+								<field name="master"/>
+								<field name="complete_name"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>	
+
+		<record id="view_tree_activity_child" model="ir.ui.view">
+			<field name="name">Activity child Tree</field>
+			<field name="model">sead.activity.child</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="complete_name"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Action to open Actividades Master -->
+		<act_window id="action_activities"
+			name="Actividades"
+			res_model="sead.activity.master"
+			view_mode="tree,form" />
+
+		<!-- Menu item to open Actividades Master -->
+		<menuitem id="menu _activities"
+			name="Actividades Maestro"
+			parent="base.menu_base_config"
+			sequence="21"
+			action="action_activities" />
+
+		<!-- Action to open Actividades 2 -->
+		<act_window id="action_activities2"
+			name="Actividades"
+			res_model="sead.activity.child"
+			view_mode="tree,form" />
+
+		<!-- Menu item to open Actividades 2 -->
+		<menuitem id="menu _activities2"
+			name="Actividades"
+			parent="base.menu_base_config"
+			sequence="21"
+			action="action_activities2" />	
+				
+	</data>
+</openerp>

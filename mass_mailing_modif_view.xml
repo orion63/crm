@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="view_form_mass_mailing_inherited" model="ir.ui.view">
+			<field name="name">Mass Mailing Form - User extension</field>
+			<field name="model">mail.mass_mailing</field>
+			<field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_form"/>
+			<field name="arch" type="xml">
+				<!-- Cambios para destinatarios -->
+    			<xpath expr="//page[@string='Options']" position="after">
+        			<page string="Destinatarios">
+						<button name="do_consolidar_mailing" type="object" string="Consolidar lista de envío" class="oe_highlight" />
+						<button name="do_limpiar_mailing" type="object" string="Limpiar lista de envío" class="oe_highlight" />
+            			<field name='partner_ids'/>
+        			</page>
+        		</xpath>										
+			</field>
+		</record>		
+
+		<record id='mass_mailing_add_wizard_form' model='ir.ui.view'>
+			<field name='name'>Mass Mailing Wizard - user extension</field>
+			<field name='model'>mail.mass_mailing.wizard</field>
+			<field name='arch' type='xml'>
+				<form string='Automatic Merge Wizard'>
+					<header>		
+						<button name='do_agregar_ejecutivos' string='Agregar seleccion'
+							class='oe_highlight'
+							type='object'
+							/>      
+					</header>
+                    <sheet>
+                        <group string="Agregar ejecutivos a mailing" col="1">
+                            <p class="oe_grey">
+                                Los cargos seleccionados serán agregados al mailing indicado.
+                                Si hay empresas en la selección, estas no seran agregadas.
+                            </p>
+						</group>
+						<group col="2">
+                            <field name='mailing_id'/>
+                        </group>
+						<group col="1">
+                            <field name="partner_ids" nolabel="1">
+                                <tree string="Partners">
+                                    <field name="id" />
+                                    <field name="display_name" />
+                                    <field name="email" />
+                                    <field name="is_company" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+
+				</form>
+			</field>
+		</record>              				
+	</data>
+</openerp>

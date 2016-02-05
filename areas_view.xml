@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="view_form_general_area" model="ir.ui.view">
+			<field name="name">General Area Form</field>
+			<field name="model">sead.position.general_area</field>
+			<field name="arch" type="xml">
+				<form string="General Area">
+					<sheet>
+						<group name="group_top">
+							<group name="group_left">
+								<field name="name"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_tree_general_area" model="ir.ui.view">
+			<field name="name">General Area Tree</field>
+			<field name="model">sead.position.general_area</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Action to open Functional Area -->
+		<act_window id="action_general_area"
+			name="General Area"
+			res_model="sead.position.general_area"
+			view_mode="tree,form" />
+
+		<!-- Menu item to open Functional Area -->
+		<menuitem id="menu_general_area"
+			name="Area General"
+			parent="base.menu_base_config"
+			sequence="23"
+			action="action_general_area" />
+
+		<!--  Area especifica-->
+		<record id="view_form_business_area" model="ir.ui.view">
+			<field name="name">Business Area Form</field>
+			<field name="model">sead.position.business_area</field>
+			<field name="arch" type="xml">
+				<form string="General Area">
+					<sheet>
+						<group name="group_top">
+							<group name="group_left">
+								<field name="name"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_tree_business_area" model="ir.ui.view">
+			<field name="name">Business Area Tree</field>
+			<field name="model">sead.position.business_area</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>	
+
+		<!-- Action to open Area Especifica -->
+		<act_window id="action_business_area"
+			name="Business Area"
+			res_model="sead.position.business_area"
+			view_mode="tree,form" />
+
+		<!-- Menu item to open  Area Especifica -->
+		<menuitem id="menu_business_area"
+			name="Area Empresarial"
+			parent="base.menu_base_config"
+			sequence="24"
+			action="action_business_area" />
+	</data>
+</openerp>

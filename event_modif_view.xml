@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="view_form_event_registration_inherited" model="ir.ui.view">
+            <field name="name">Event registration form - modified</field>
+            <field name="model">event.registration</field>
+            <field name="inherit_id" ref="event.view_event_registration_form"/>
+            <field name="arch" type="xml">
+                <header>
+                    <button name="do_split_register" type="object" string="Dividir en cupos individuales" class="oe_edit_only" attrs="{'invisible': [('nb_register', '=', 1)]}"/>
+                </header>
+                <field name="name" position="after">
+                    <field name="partner_function" />
+                    <field name="registration_type" />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_event_registration_tree_inherited" model="ir.ui.view">
+            <field name="name">Event registration tree - modified</field>
+            <field name="model">event.registration</field>
+            <field name="inherit_id" ref="event.view_event_registration_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="registration_type" />
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
