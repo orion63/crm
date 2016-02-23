@@ -165,12 +165,14 @@
             <field name="context">{'active_test': False}</field>
         </record>       
 
+
+
         <!-- El menu principal -->
 
         <menuitem id="menu_bd_utilities"
             name="Utilidades de BD"
             parent="base.menu_base_config"
-            sequence="24" />
+            sequence="24" />            
 
         <!-- Los submenues -->
 
@@ -192,6 +194,7 @@
             parent="menu_bd_utilities"
             sequence="3"
             action="action_bd_utilities_cartera_no_asignada" />
+
 
     </data>
 </openerp>

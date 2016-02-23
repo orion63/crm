@@ -26,7 +26,7 @@
 						<button name='do_agregar_ejecutivos' string='Agregar seleccion'
 							class='oe_highlight'
 							type='object'
-							/>      
+							/>     							    														  
 					</header>
                     <sheet>
                         <group string="Agregar ejecutivos a mailing" col="1">
@@ -49,9 +49,47 @@
                             </field>
                         </group>
                     </sheet>
-
 				</form>
 			</field>
 		</record>              				
+
+		<record id='mass_export_partner_wizard_form' model='ir.ui.view'>
+			<field name='name'>Export Partner Wizard - user extension</field>
+			<field name='model'>mail.mass_export_partner</field>
+			<field name='arch' type='xml'>
+				<form string='Exportar'>
+					<header>		
+						<button name='do_exportar_mailing' string='Exportar mailing'
+							class='oe_highlight'
+							type='object'
+							/>  							    														  
+					</header>
+					<header>		
+						<button name='do_exportar_etiquetas' string='Exportar etiquetas'
+							class='oe_highlight'
+							type='object'
+							/>  							    														  
+					</header>					
+                    <sheet>
+                        <group string="Exportar ejecutivos o empresas" col="1">
+                            <p class="oe_grey">
+                                Los registros seleccionados serán exportador en formato CSV.
+                                Solamente se agregará los registros que cumplan con la condición solicitada.
+                            </p>
+						</group>
+						<group col="1">
+                            <field name="partner_ids" nolabel="1">
+                                <tree string="Partners">
+                                    <field name="id" />
+                                    <field name="display_name" />
+                                    <field name="email" />
+                                    <field name="is_company" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+				</form>
+			</field>
+		</record>  
 	</data>
 </openerp>

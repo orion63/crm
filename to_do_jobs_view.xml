@@ -34,7 +34,7 @@
                     <field name="partner"/>
                     <field name="bd_user"/>
                     <field name="rank_points"/>
-                    <field name="rank_points"/>
+                    <field name="rank_position"/>
                     <field name="priority"/>
                 </tree>
             </field>

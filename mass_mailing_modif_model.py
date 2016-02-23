@@ -110,3 +110,34 @@ class mass_mailing_wizard(osv.TransientModel):
 			if not ejecutivo.is_company:
 				mailing.partner_ids = [(4, ejecutivo.id)]
 		return True		
+
+
+class mass_export_partner(osv.TransientModel):
+	_name = 'mail.mass_export_partner'	
+	partner_ids = fields.Many2many('res.partner', string='Contacts')
+
+	def default_get(self, cr, uid, fields, context=None):
+		if context is None:
+			context = {}
+		res = super(mass_export_partner, self).default_get(cr, uid, fields, context)
+		if context.get('active_model') == 'res.partner' and context.get('active_ids'):
+			partner_ids = context['active_ids']
+			res['partner_ids'] = partner_ids            
+		return res
+	
+
+	@api.multi
+	def do_exportar_mailing(self):
+		return {
+			'type' : 'ir.actions.act_url',
+			'url': '/web/binary/download_document_mailing?model=res.partner&field=name&id=%s&filename=exportacion.csv'%(self.id),
+			'target': 'self',
+		}		
+
+	@api.multi
+	def do_exportar_etiquetas(self):
+		return {
+			'type' : 'ir.actions.act_url',
+			'url': '/web/binary/download_document_etiquetas?model=res.partner&field=name&id=%s&filename=etiquetas.csv'%(self.id),
+			'target': 'self',
+		}				

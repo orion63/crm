@@ -20,6 +20,7 @@ class event_extension(osv.osv):
 	_inherit = 'event.event'
 	compatible_code = fields.Char('Codigo compatible', size=20)	
 
+
 class res_partner_extension(osv.osv):
 	_inherit = 'res.partner'
 	# when _name is not explicitly set, implicitly it is the same as the original
@@ -190,3 +191,9 @@ class res_partner_extension(osv.osv):
 			'url': '/web/binary/download_document?model=res.partner&field=name&id=%s&filename=ficha_partner.html'%(self.id),
 			'target': 'self',
 		}
+
+	# cambios GL para incluir provincia y distrito en los campos - 12/02/2016
+	# esta funcion recaba los campos que se debe copiar de la empresa a los ejecutivos cuando se indica use_company_address
+	def _address_fields(self, cr, uid, context=None):
+		address_fields = super(res_partner_extension, self)._address_fields(cr, uid, context=context)
+		return list(address_fields + ['province_id', 'district_id'])		

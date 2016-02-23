@@ -8,9 +8,10 @@ class Activity_Master(models.Model):
 
 class Activity_Child(models.Model):
 	_name = 'sead.activity.child'
-	name = fields.Char('Descripcion', size=80, required=True)
+	name = fields.Char('Descripcion', size=150, required=True)
 	master = fields.Many2one('sead.activity.master', 'Actividad Padre')
 	complete_name = fields.Char('Nombre completo', compute='get_complete_name', store='True')
+	short_name = fields.Char('Nombre corto', size=80)
 
 	# https://www.odoo.com/documentation/8.0/howtos/backend.html#computed-fields-and-default-values
 	# http://es.slideshare.net/openobject/odoo-from-v7-to-v8-the-new-api

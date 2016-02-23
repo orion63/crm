@@ -132,3 +132,192 @@ class Ficha_Partner(http.Controller):
 			return request.make_response(fc,
 				[('Content-Type', 'application/octet-stream'),('Content-Disposition', content_disposition(filename))])  
 
+def prep_csv(UnTexto):
+	if "," in UnTexto:
+		result = '"' + UnTexto + '"'
+	else:
+		if (len(UnTexto) > 0) and (UnTexto[0] == '"') and (UnTexto[len(UnTexto) - 1] != '"'):
+			result = '"' + UnTexto + '"'
+		else:
+			result = UnTexto
+	return result
+
+class Export_Partner(http.Controller):
+	@http.route('/web/binary/download_document2', type='http', auth="public")
+	@serialize_exception
+
+	def download_document(self,model,field,id,filename=None, **kw):
+		print('----------------- download_document ------------------')
+		partner_id = id
+		wizard_obj = request.registry['mail.mass_mailing.wizard']
+		wizards = wizard_obj.read(request.cr, request.uid, [int(partner_id)], ['partner_ids','mailing_id'], context=None)		
+		wizard = wizards[0]
+		partner_ids = wizard['partner_ids']
+		print('----')
+		print(partner_ids)
+		Model = request.registry[model]
+
+		partner_obj = request.registry['res.partner']
+		# los ejecutivos
+		partners = partner_obj.read(request.cr, request.uid, partner_ids, 
+			['is_company', 'name', 'street', 'state_id', 'province_id', 'district_id'], context=None)
+
+		# cabeceras
+		fc = ''
+		for partner in partners:
+			if partner['is_company'] == False:
+				name = partner['name'] if partner['name'] else ""
+				street = partner['street'] if partner['street'] else ""
+				state = partner['state_id'][1] if partner['state_id'] else ""
+				province = partner['province_id'][1] if partner['province_id'] else ""
+				district = partner['district_id'][1] if partner['district_id'] else ""
+				fc = fc + prep_csv(name) +  ',' + prep_csv(street) + ',' + prep_csv(district) + ',' + prep_csv(province) + ',' + prep_csv(state) + '\n'
+
+		#test = 'Ramírez'
+		#udata = test.decode("utf-8")
+		#asciidata = udata.encode("ascii","ignore")
+		# ANSI ???????
+		#fc = udata
+
+		if not fc:
+			print('not fc')
+			return request.not_found()
+		else:
+			print(' si fc')
+			print(filename)
+			if not filename:
+					print('not filename')
+					filename = '%s_%s' % (model.replace('.', '_'), id)
+			return request.make_response(fc,
+				#[('Content-Type', 'application/octet-stream'),('Content-Disposition', content_disposition(filename))])  
+				[('Content-Type', 'application/octet-stream;charset=utf-8'),('Content-Disposition', content_disposition(filename))])  
+
+
+class Export_Partner_mailing(http.Controller):
+	@http.route('/web/binary/download_document_mailing', type='http', auth="public")
+	@serialize_exception
+
+	def download_document(self,model,field,id,filename=None, **kw):
+		print('----------------- download_document ------------------')
+		partner_id = id
+		wizard_obj = request.registry['mail.mass_export_partner']
+		wizards = wizard_obj.read(request.cr, request.uid, [int(partner_id)], ['partner_ids'], context=None)		
+		wizard = wizards[0]
+		partner_ids = wizard['partner_ids']
+		print('----')
+		print(partner_ids)
+		Model = request.registry[model]
+
+		partner_obj = request.registry['res.partner']
+		# los ejecutivos
+		partners = partner_obj.read(request.cr, request.uid, partner_ids, 
+			['is_company', 'name', 'names', 'last_name', 'gender_suffix', 'title', 
+			'email', 'email_exclude', 'email_gracias', 
+			'personal_email', 'personal_email_exclude', 'personal_email_gracias',
+			'secretary_email', 'secretary_email_exclude', 'secretary_email_gracias', 
+			'secretary_personal_email', 'secretary_personal_email_exclude', 'secretary_personal_email_gracias'], context=None)
+
+		# cabeceras
+		fc = ''
+		for partner in partners:
+			if partner['is_company'] == False:
+				name = partner['name'] if partner['name'] else ""
+				names = partner['names'] if partner['names'] else ""
+				last_name = partner['last_name'] if partner['last_name'] else ""
+				suffix = partner['gender_suffix'] if partner['gender_suffix'] else "o"
+				estimado = 'Estimad' + suffix
+				title = partner['title'][1] if partner['title'] else ""
+
+				emails = []
+				if (partner['email_exclude'] == False) and (partner['email_gracias']  == False) and (partner['email'] != False):
+					emails = emails + [partner['email']]
+
+				if (partner['personal_email_exclude'] == False) and (partner['personal_email_gracias'] == False) and (partner['personal_email'] != False):
+					emails = emails + [partner['personal_email']]
+
+				if (partner['secretary_email_exclude'] == False) and (partner['secretary_email_gracias'] == False) and (partner['secretary_email'] != False):
+					emails = emails + [partner['secretary_email']]
+
+				if (partner['secretary_personal_email_exclude'] == False) and (partner['secretary_personal_email_gracias'] == False) and (partner['secretary_personal_email'] != False):
+					emails = emails + [partner['secretary_personal_email']]
+
+				emails_text = ''
+				for email in emails:
+				    if len(emails_text) == 0:
+				        emails_text = emails_text + email
+				    else:
+				        emails_text = emails_text + ';' + email
+				email = ''
+				if len(emails) > 0:
+					email = emails[0]
+
+				fc = fc + prep_csv(email) + ',' +  prep_csv(estimado) + ',' + prep_csv(title) +  ',' + prep_csv(names)+  ',' + prep_csv(last_name) +  ',' + prep_csv(suffix) + ',' + prep_csv(emails_text) +  ',' + prep_csv(name) + '\n'
+
+		if not fc:
+			print('not fc')
+			return request.not_found()
+		else:
+			print(' si fc')
+			print(filename)
+			if not filename:
+					print('not filename')
+					filename = '%s_%s' % (model.replace('.', '_'), id)
+			return request.make_response(fc,
+				#[('Content-Type', 'application/octet-stream'),('Content-Disposition', content_disposition(filename))])  
+				[('Content-Type', 'application/octet-stream;charset=utf-8'),('Content-Disposition', content_disposition(filename))])  
+
+
+class Export_Partner_etiquetas(http.Controller):
+	@http.route('/web/binary/download_document_etiquetas', type='http', auth="public")
+	@serialize_exception
+
+	def download_document(self,model,field,id,filename=None, **kw):
+		print('----------------- download_document ------------------')
+		partner_id = id
+		wizard_obj = request.registry['mail.mass_export_partner']
+		wizards = wizard_obj.read(request.cr, request.uid, [int(partner_id)], ['partner_ids'], context=None)		
+		wizard = wizards[0]
+		partner_ids = wizard['partner_ids']
+		print('----')
+		print(partner_ids)
+		Model = request.registry[model]
+
+		partner_obj = request.registry['res.partner']
+		# los ejecutivos
+		partners = partner_obj.read(request.cr, request.uid, partner_ids, 
+			['is_company', 'name', 'names', 'last_name', 'mother_name', 'gender', 'gender_suffix', 'title', 'function', 
+			'street', 'state_id', 'province_id', 'district_id', 'parent_id'], context=None)
+
+		# cabeceras
+		fc = ''
+		for partner in partners:
+			if partner['is_company'] == False:
+				name = partner['name'] if partner['name'] else ""
+				names = partner['names'] if partner['names'] else ""
+				last_name = partner['last_name'] if partner['last_name'] else ""
+				mother_name = partner['mother_name'] if partner['mother_name'] else ""
+				function = partner['function'] if partner['function'] else ""
+				suffix = partner['gender_suffix'] if partner['gender_suffix'] else "o"
+				gender = partner['gender'] if partner['gender'] else ""
+				estimado = 'Estimad' + suffix
+				title = partner['title'][1] if partner['title'] else ""
+				street = partner['street'] if partner['street'] else ""
+				state = partner['state_id'][1] if partner['state_id'] else ""
+				province = partner['province_id'][1] if partner['province_id'] else ""
+				district = partner['district_id'][1] if partner['district_id'] else ""
+				empresa = partner['parent_id'][1] if partner['parent_id'] else ""
+
+				fc = fc + prep_csv(empresa)+  ',' + prep_csv(names) +  ',' + prep_csv(last_name)+  ',' + prep_csv(mother_name) +  ',' + prep_csv(function) + ',' + prep_csv(street) + ',' + prep_csv(district) + ',' + prep_csv(province) + ',' + prep_csv(state) +  ',' + prep_csv(estimado) +  ',' + prep_csv(name) +  ',' + prep_csv(title)+  ',' + prep_csv(suffix) + '\n'
+
+		if not fc:
+			print('not fc')
+			return request.not_found()
+		else:
+			print(' si fc')
+			print(filename)
+			if not filename:
+					print('not filename')
+					filename = '%s_%s' % (model.replace('.', '_'), id)
+			return request.make_response(fc,
+				#[('Content-Type', 'application/octet-stream'),('Content-Disposition', content_disposition(filename))])  
+				[('Content-Type', 'application/octet-stream;charset=utf-8'),('Content-Disposition', content_disposition(filename))])  			

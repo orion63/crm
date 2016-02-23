@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
+        <record id="view_tree_partner_inherited" model="ir.ui.view">
+            <field name="name">Parner Listview</field>
+            <field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="function"/>
+                    <field name="hierarchy_level"/>
+                </tree>
+            </field>
+        </record>		
+
+
 		<record id="view_form_partner_inherited" model="ir.ui.view">
 			<field name="name">Partner Form - User extension</field>
 			<field name="model">res.partner</field>
@@ -141,7 +154,9 @@
 
 
 		<act_window id="partner_to_mailing_wizard" res_model="mail.mass_mailing.wizard"  src_model="res.partner"
-			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Agregar a mailing"/>			 
+			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Agregar a mailing"/>	
 
+		<act_window id="export_partner_wizard" res_model="mail.mass_export_partner"  src_model="res.partner"
+			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Exportar Peru"/>			 
 	</data>
 </openerp>
