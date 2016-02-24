@@ -4,6 +4,7 @@ from openerp.osv import osv
 from email.utils import formataddr
 from openerp import api, tools
 
+
 class mass_mailing_extension(osv.osv):
 	_name = 'mail.mass_mailing'	
 	_inherit = 'mail.mass_mailing'
@@ -13,7 +14,7 @@ class mass_mailing_extension(osv.osv):
 	def do_agregar_mailing(self):
 		# called by button defined in todo_view.xml
 		# self represents one record (api.one)
-		#self.is_done = not self.is_done
+		# self.is_done = not self.is_done
 		# must return something for XMLRPC
 
 		dumb = self.env['sead.activity.child']
@@ -26,15 +27,14 @@ class mass_mailing_extension(osv.osv):
 
 		#browse
 		Basura = "\r\n"+ "Cliente: " + self.name
-		raise osv.except_osv(("Warning!"), (Basura))			
-	
+		raise osv.except_osv(("Warning!"), (Basura))
 		return True		
 
 	@api.one
 	def do_consolidar_mailing(self):
 		# called by button defined in view.xml
 		# self represents one record (api.one)
-		#self.is_done = not self.is_done
+		# self.is_done = not self.is_done
 		# must return something for XMLRPC
 
 		valor = []
@@ -48,11 +48,12 @@ class mass_mailing_extension(osv.osv):
 	def do_limpiar_mailing(self):
 		# called by button defined in view.xml
 		# self represents one record (api.one)
-		#self.is_done = not self.is_done
+		# self.is_done = not self.is_done
 		# must return something for XMLRPC
 		valor = []
 		self.write({'partner_ids':  [(6, 0, valor)]})
 		return True
+
 
 class mail_mail_extension(osv.osv):
 	_name = 'mail.mail'
@@ -100,7 +101,7 @@ class mass_mailing_wizard(osv.TransientModel):
 	def do_agregar_ejecutivos(self):
 		# called by button defined in todo_view.xml
 		# self represents one record (api.one)
-		#self.is_done = not self.is_done
+		# self.is_done = not self.is_done
 		# must return something for XMLRPC
 
 		mailing = self.mailing_id
@@ -124,7 +125,7 @@ class mass_export_partner(osv.TransientModel):
 			partner_ids = context['active_ids']
 			res['partner_ids'] = partner_ids            
 		return res
-	
+
 
 	@api.multi
 	def do_exportar_mailing(self):

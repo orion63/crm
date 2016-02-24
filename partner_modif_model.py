@@ -197,3 +197,31 @@ class res_partner_extension(osv.osv):
 	def _address_fields(self, cr, uid, context=None):
 		address_fields = super(res_partner_extension, self)._address_fields(cr, uid, context=context)
 		return list(address_fields + ['province_id', 'district_id'])		
+
+
+class mass_partner_label_wizard(osv.TransientModel):
+	_name = 'res.partner.mass_label'
+	category_id = fields.Many2one('res.partner.category', 'Etiqueta')
+	partner_ids = fields.Many2many('res.partner', string='Contacts')
+
+	def default_get(self, cr, uid, fields, context=None):
+		if context is None:
+			context = {}
+		res = super(mass_partner_label_wizard, self).default_get(cr, uid, fields, context)
+		if context.get('active_model') == 'res.partner' and context.get('active_ids'):
+			partner_ids = context['active_ids']
+			res['partner_ids'] = partner_ids            
+		return res
+
+	@api.one
+	def do_assign_labels(self):
+		# called by button defined in todo_view.xml
+		# self represents one record (api.one)
+		# self.is_done = not self.is_done
+		# must return something for XMLRPC
+		category = self.category_id
+		ejecutivos = self.partner_ids
+		for ejecutivo in ejecutivos:
+			if not ejecutivo.is_company:
+				ejecutivo.category_id = [(4, category.id)]
+		return True				

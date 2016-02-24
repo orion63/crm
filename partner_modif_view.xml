@@ -152,11 +152,50 @@
 			</field>	
 		</record>
 
+		<record id='mass_partner_label_wizard_form' model='ir.ui.view'>
+			<field name='name'>Mass Partner Label</field>
+			<field name='model'>res.partner.mass_label</field>
+			<field name='arch' type='xml'>
+				<form string='Asignar etiquetas'>
+					<header>		
+						<button name='do_assign_labels' string='Asignar'
+							class='oe_highlight'
+							type='object'
+							/>  							    														  
+					</header>				
+                    <sheet>
+                        <group string="Asignar etiquetas" col="1">
+                            <p class="oe_grey">
+                                Los registros seleccionados recibirán la etiqueta seleccionada.
+                            </p>
+						</group>
+						<group col="2">
+                            <field name='category_id'/>
+                        </group>						
+						<group col="1">
+                            <field name="partner_ids" nolabel="1">
+                                <tree string="Partners">
+                                    <field name="id" />
+                                    <field name="display_name" />
+                                    <field name="email" />
+                                    <field name="is_company" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+				</form>
+			</field>
+		</record>  
+
+
 
 		<act_window id="partner_to_mailing_wizard" res_model="mail.mass_mailing.wizard"  src_model="res.partner"
 			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Agregar a mailing"/>	
 
 		<act_window id="export_partner_wizard" res_model="mail.mass_export_partner"  src_model="res.partner"
-			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Exportar Peru"/>			 
+			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Exportar Peru"/>
+
+		<act_window id="label_partner_wizard" res_model="res.partner.mass_label"  src_model="res.partner"
+			 target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Asignar etiqueta"/>
 	</data>
 </openerp>
