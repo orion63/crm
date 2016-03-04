@@ -12,7 +12,18 @@
                 <field name="name" position="after">
                     <field name="partner_function" />
                     <field name="registration_type" />
+                    <field name="registration_days" />
                 </field>
+                <field name="date_closed" position="after">
+                    <button class="oe_inline oe_right" string="Alternativo enviar eTicket"
+                            name="%(mail.action_email_compose_message_wizard)d"
+                            context= '{"default_email_to":email}' type="action"
+                            attrs="{'invisible': True}"/>
+                    <button class="oe_inline oe_right" string="Generar eTicket"
+                            name="create_eticket" type="object"/>  
+                    <button class="oe_inline oe_right" string="Enviar eTicket"
+                            name="prepare_eticket" type="object"/>                                                   
+                </field>                            
             </field>
         </record>
 
@@ -24,6 +35,7 @@
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
                     <field name="registration_type" />
+                    <field name="registration_days" />
                 </field>
             </field>
         </record>
