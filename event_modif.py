@@ -127,7 +127,8 @@ class event_registration_extension(models.Model):
 	def create_eticket(self):
 		# obtenemos el objeto con la nueva API !!
 		attachment_obj = self.env['ir.attachment']
-		nombre_asistente = self.name.encode('ascii')
+		nombre_asistente = self.name.encode('utf-8')
+		# nombre_asistente = self.name.encode('ascii')
 		nombre_evento = self.event_id.name		
 		file_name = 'eticket'
 		label_codigo = str(self.id)
