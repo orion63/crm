@@ -15,6 +15,7 @@ class event_registration_extension(models.Model):
 	_inherit = 'event.registration'
 	# when _name is not explicitly set, implicitly it is the same as the original
 	partner_function = fields.Char('Cargo')
+	credential_printed = fields.Boolean('Gafete impreso')
 	registration_type = fields.Selection((('V', 'Venta'), ('A', 'Auspicio'), ('I', 'Invitado'), ('C', 'Canje')), default = 'V', string = 'Tipo de cupo')
 	registration_days = fields.Selection((('C', 'Evento completo'), ('1', 'Dia 1'), ('2', 'Dia 2'), ('3', 'Dia 3')), default = 'C', string = 'Dias')
 
@@ -268,3 +269,41 @@ class mail_compose_message_extend(osv.TransientModel):
 		if context and context.get('include_eticket') :
 			result['include_model_attachments'] = True
 		return result
+
+
+
+class event_export_registration(osv.TransientModel):
+	_name = 'event.export_registration'
+	registration_ids = fields.Many2many('event.registration', string='Registro')
+
+	def default_get(self, cr, uid, fields, context=None):
+		if context is None:
+			context = {}
+		res = super(event_export_registration, self).default_get(cr, uid, fields, context)
+		if context.get('active_model') == 'event.registration' and context.get('active_ids'):
+			registration_ids = context['active_ids']
+			res['registration_ids'] = registration_ids
+		return res
+
+
+	@api.multi
+	def do_exportar_gafetes(self):
+		return {
+			'type' : 'ir.actions.act_url',
+			'url': '/web/binary/download_event_registration_gafetes?model=event.registration&field=name&id=%s&filename=gafetes.gft'%(self.id),
+			'target': 'self',
+		}		
+
+	@api.multi
+	def do_marcar_gafetes(self):
+		registration_obj = self.pool.get('event.registratio')
+		for registration in self.registration_ids:
+			registration.write({'credential_printed':  True})
+		return True
+
+	@api.multi
+	def do_marcar_gafetes_pendientes(self):
+		registration_obj = self.pool.get('event.registratio')
+		for registration in self.registration_ids:
+			registration.write({'credential_printed':  False})
+		return True		

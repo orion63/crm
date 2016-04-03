@@ -13,6 +13,7 @@
                     <field name="partner_function" />
                     <field name="registration_type" />
                     <field name="registration_days" />
+                    <field name="credential_printed" />
                 </field>
                 <field name="date_closed" position="after">
                     <button class="oe_inline oe_right" string="Alternativo enviar eTicket"
@@ -39,6 +40,44 @@
                 </field>
             </field>
         </record>
+
+        <record id='event_export_registration_wizard_form' model='ir.ui.view'>
+            <field name='name'>Export Registration Wizard - user extension</field>
+            <field name='model'>event.export_registration</field>
+            <field name='arch' type='xml'>
+                <form string='Exportar'>
+                    <header>        
+                        <button name='do_exportar_gafetes' string='Exportar Gafetes Pendientes'
+                            class='oe_highlight' type='object' />                                                                                            
+                        <button name='do_marcar_gafetes' string='Marcar Gafetes Como Impresos'
+                            class='oe_highlight' type='object' />                                                                                            
+                        <button name='do_marcar_gafetes_pendientes' string='Marcar Gafetes Como Pendientes'
+                            class='oe_highlight' type='object' />                                                                                            
+                    </header>
+                    <sheet>
+                        <group string="Exportar registro" col="1">
+                            <p class="oe_grey">
+                                Los registros seleccionados serán exportador en formato especial para impresión de gafetes.
+                                Solamente se exportarán los registros que no estén marcados como Gafete Impreso.
+                            </p>
+                            <p class="oe_grey">
+                                Luego de imprimir los gafetes correctamente, debe presionar el botón Marcar Gafetes Impresos.
+                            </p>
+                        </group>
+                        <group col="1">
+                            <field name="registration_ids" nolabel="1">
+                                <tree string="Registro">
+                                    <field name="name" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>  
+
+        <act_window id="export_gafetes_wizard" res_model="event.export_registration"  src_model="event.registration"
+             target="new" multi="True" key2="client_action_multi"  view_mode="form" name="Exportar Gafetes"/>        
 
     </data>
 </openerp>
