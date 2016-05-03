@@ -208,6 +208,8 @@ class Export_Partner_mailing(http.Controller):
 		print(partner_ids)
 		Model = request.registry[model]
 
+		activities_obj = request.registry['sead.activity.child']
+
 		partner_obj = request.registry['res.partner']
 		# los ejecutivos
 		partners = partner_obj.read(request.cr, request.uid, partner_ids, 
@@ -215,7 +217,8 @@ class Export_Partner_mailing(http.Controller):
 			'email', 'email_exclude', 'email_gracias', 
 			'personal_email', 'personal_email_exclude', 'personal_email_gracias',
 			'secretary_email', 'secretary_email_exclude', 'secretary_email_gracias', 
-			'secretary_personal_email', 'secretary_personal_email_exclude', 'secretary_personal_email_gracias'], context=None)
+			'secretary_personal_email', 'secretary_personal_email_exclude', 'secretary_personal_email_gracias',
+			'hierarchy_level', 'function', 'business_area', 'activities'], context=None)
 
 		# cabeceras
 		fc = ''
@@ -226,7 +229,16 @@ class Export_Partner_mailing(http.Controller):
 				last_name = partner['last_name'] if partner['last_name'] else ""
 				suffix = partner['gender_suffix'] if partner['gender_suffix'] else "o"
 				estimado = 'Estimad' + suffix
+				nivel = prep_csv(partner['hierarchy_level'] if partner['hierarchy_level'] else "")
+				cargo = prep_csv(partner['function'] if partner['function'] else "")
+				area =  prep_csv(partner['business_area'][1] if partner['business_area'] else "")
 				title = partner['title'][1] if partner['title'] else ""
+				actividades = ''
+				for actividad_id in partner['activities']:
+					act = activities_obj.read(request.cr, request.uid, actividad_id, ['name'], context=None)
+					if (actividades != ''):
+						actividades = actividades + ' - '
+					actividades = actividades + act['name']
 
 				emails = []
 				if (partner['email_exclude'] == False) and (partner['email_gracias']  == False) and (partner['email'] != False):
@@ -251,7 +263,8 @@ class Export_Partner_mailing(http.Controller):
 				if len(emails) > 0:
 					email = emails[0]
 
-				fc = fc + prep_csv(email) + ',' +  prep_csv(estimado) + ',' + prep_csv(title) +  ',' + prep_csv(names)+  ',' + prep_csv(last_name) +  ',' + prep_csv(suffix) + ',' + prep_csv(emails_text) +  ',' + prep_csv(name) + '\n'
+				fc = fc + prep_csv(email) + ',' +  prep_csv(estimado) + ',' + prep_csv(title) +  ',' + prep_csv(names)+  ',' + prep_csv(last_name) +  ',' + prep_csv(suffix) + ',' + prep_csv(emails_text) +  ',' 
+				fc = fc + cargo + ',' + area + ',' + nivel + ',' + prep_csv(name) + ',' + prep_csv(actividades) + '\n'
 
 		if not fc:
 			print('not fc')
