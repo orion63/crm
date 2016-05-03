@@ -218,7 +218,7 @@ class Export_Partner_mailing(http.Controller):
 			'personal_email', 'personal_email_exclude', 'personal_email_gracias',
 			'secretary_email', 'secretary_email_exclude', 'secretary_email_gracias', 
 			'secretary_personal_email', 'secretary_personal_email_exclude', 'secretary_personal_email_gracias',
-			'hierarchy_level', 'function', 'business_area', 'activities'], context=None)
+			'hierarchy_level', 'function', 'business_area', 'activities', 'parent_id'], context=None)
 
 		# cabeceras
 		fc = ''
@@ -233,6 +233,7 @@ class Export_Partner_mailing(http.Controller):
 				cargo = prep_csv(partner['function'] if partner['function'] else "")
 				area =  prep_csv(partner['business_area'][1] if partner['business_area'] else "")
 				title = partner['title'][1] if partner['title'] else ""
+				empresa = partner['parent_id'][1] if partner['parent_id'] else ""
 				actividades = ''
 				for actividad_id in partner['activities']:
 					act = activities_obj.read(request.cr, request.uid, actividad_id, ['name'], context=None)
@@ -264,7 +265,7 @@ class Export_Partner_mailing(http.Controller):
 					email = emails[0]
 
 				fc = fc + prep_csv(email) + ',' +  prep_csv(estimado) + ',' + prep_csv(title) +  ',' + prep_csv(names)+  ',' + prep_csv(last_name) +  ',' + prep_csv(suffix) + ',' + prep_csv(emails_text) +  ',' 
-				fc = fc + cargo + ',' + area + ',' + nivel + ',' + prep_csv(name) + ',' + prep_csv(actividades) + '\n'
+				fc = fc + cargo + ',' + area + ',' + nivel + ',' + prep_csv(name) + ',' + prep_csv(empresa) + ',' + prep_csv(actividades) + '\n'
 
 		if not fc:
 			print('not fc')
