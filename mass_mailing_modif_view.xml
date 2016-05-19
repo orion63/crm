@@ -65,6 +65,12 @@
 							/>  							    														  
 					</header>
 					<header>		
+						<button name='do_exportar_mailing_basico' string='Exportar mailing básico'
+							class='oe_highlight'
+							type='object'
+							/>  							    														  
+					</header>					
+					<header>		
 						<button name='do_exportar_etiquetas' string='Exportar etiquetas'
 							class='oe_highlight'
 							type='object'

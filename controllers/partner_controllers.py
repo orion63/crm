@@ -281,6 +281,62 @@ class Export_Partner_mailing(http.Controller):
 				[('Content-Type', 'application/octet-stream;charset=utf-8'),('Content-Disposition', content_disposition(filename))])  
 
 
+
+class Export_Partner_mailing_basico(http.Controller):
+	@http.route('/web/binary/download_document_mailing_basico', type='http', auth="public")
+	@serialize_exception
+
+	def download_document(self,model,field,id,filename=None, **kw):
+		print('----------------- download_document ------------------')
+		partner_id = id
+		wizard_obj = request.registry['mail.mass_export_partner']
+		wizards = wizard_obj.read(request.cr, request.uid, [int(partner_id)], ['partner_ids'], context=None)		
+		wizard = wizards[0]
+		partner_ids = wizard['partner_ids']
+		print('----')
+		print(partner_ids)
+		Model = request.registry[model]
+
+		activities_obj = request.registry['sead.activity.child']
+
+		partner_obj = request.registry['res.partner']
+		# los ejecutivos
+		partners = partner_obj.read(request.cr, request.uid, partner_ids, 
+			['is_company', 'name', 'names', 'last_name', 'gender_suffix', 'title', 
+			'email', 'email_exclude', 'email_gracias', 'hierarchy_level'], context=None)
+
+		# cabeceras
+		fc = ''
+		for partner in partners:
+			if partner['is_company'] == False:
+				name = partner['name'] if partner['name'] else ""
+				names = partner['names'] if partner['names'] else ""
+				last_name = partner['last_name'] if partner['last_name'] else ""
+				suffix = partner['gender_suffix'] if partner['gender_suffix'] else "o"
+				estimado = 'Estimad' + suffix
+				nivel = prep_csv(partner['hierarchy_level'] if partner['hierarchy_level'] else "")
+				title = partner['title'][1] if partner['title'] else ""
+
+				email = ''
+				if (partner['email_exclude'] == False) and (partner['email_gracias']  == False) and (partner['email'] != False):
+					email = partner['email']
+					fc = fc + prep_csv(email) + ',' +  prep_csv(estimado) + ',' + prep_csv(title) +  ',' + prep_csv(names)+  ',' + prep_csv(last_name) +  ',' + prep_csv(suffix) + ',' + prep_csv(email) +  ',' 
+					fc = fc + nivel + ',' + prep_csv(name) + '\n'
+
+		if not fc:
+			print('not fc')
+			return request.not_found()
+		else:
+			print(' si fc')
+			print(filename)
+			if not filename:
+					print('not filename')
+					filename = '%s_%s' % (model.replace('.', '_'), id)
+			return request.make_response(fc,
+				#[('Content-Type', 'application/octet-stream'),('Content-Disposition', content_disposition(filename))])  
+				[('Content-Type', 'application/octet-stream;charset=utf-8'),('Content-Disposition', content_disposition(filename))])  
+
+
 class Export_Partner_etiquetas(http.Controller):
 	@http.route('/web/binary/download_document_etiquetas', type='http', auth="public")
 	@serialize_exception

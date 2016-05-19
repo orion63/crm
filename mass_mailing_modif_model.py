@@ -131,7 +131,15 @@ class mass_export_partner(osv.TransientModel):
 	def do_exportar_mailing(self):
 		return {
 			'type' : 'ir.actions.act_url',
-			'url': '/web/binary/download_document_mailing?model=res.partner&field=name&id=%s&filename=exportacion.csv'%(self.id),
+			'url': '/web/binary/download_document_mailing?model=res.partner&field=name&id=%s&filename=exportacion_basica.csv'%(self.id),
+			'target': 'self',
+		}		
+
+	@api.multi
+	def do_exportar_mailing_basico(self):
+		return {
+			'type' : 'ir.actions.act_url',
+			'url': '/web/binary/download_document_mailing_basico?model=res.partner&field=name&id=%s&filename=exportacion.csv'%(self.id),
 			'target': 'self',
 		}		
 
